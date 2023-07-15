@@ -6,6 +6,11 @@
 $env:GIT_SSH = "C:\Windows\system32\OpenSSH\ssh.exe"
 
 #Aliases - functions
+
+function whereis {
+  Get-Command -CommandType Application -ErrorAction SilentlyContinue -Name $args[0] | Select-Object -ExpandProperty Definition
+}
+
 function msdosCMD {
     cmd /r dir $args
     ""
