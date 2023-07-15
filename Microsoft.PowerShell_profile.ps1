@@ -1,5 +1,4 @@
 # C:\Users\User\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
-# My PowerShell profile with Kali Linux prompt and Bash like history command
 # set PowerShell to UTF-8
 [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
 
@@ -19,41 +18,58 @@ function reset {
 }
 
 # BASH like history commands
-# history    : returns all PowerShell history with line numbers
-# history -c : returns history only for the current shell
-# `! xxxx    : where x equals line number from history command to execute
 function getHistory {
     $index = 1
-    # Get history only for current session
-    if ( $args -match "^\d+$" ) {
+    # Get history for all of time and add ID/Linue number
+    if ( !$args ) {
+        (Get-Content (Get-PSReadlineOption).HistorySavePath).trim() | ForEach-Object { "  {0}  {1}" -f $index++, $_ }
+    }
+    # Parse history and invoke the specified command from history
+    elseif ( $args -match "^\d+$" ) {
         [int]$numericArgs = [convert]::ToInt32($args, 10)
         foreach( $line in (Get-Content (Get-PSReadlineOption).HistorySavePath).trim() ) {
-        if ( $index -eq $numericArgs ) {
-            break
+            if ( $index -eq $numericArgs ) {
+                break
+            }
+            $index++
         }
-        $index++
+        Invoke-Expression $line
     }
-    Invoke-Expression $line
-    }
+    # Get history only for current session    
     elseif ( $args -eq "-c" ) {
         Get-History
     }
-    # Get history for all of time.
     else {
-        (Get-Content (Get-PSReadlineOption).HistorySavePath).trim() | ForEach-Object { "  {0}  {1}" -f $index++, $_ }
+        Write-Host "history : Cannot locate the history for command line $args" -ForegroundColor Red
     }
+    <# 
+        .SYNOPSIS
+            A BASH like alias for the history command.
+        .DESCRIPTION
+            history : no arguments - display all command history.
+            history -c : show command history for current session only.
+    #>
 }
-# ``! xxxx   : where x equals the id from current shell history
-function runFromCurrentHistory {
+function invokeCurrentHistory {
     [int]$numericArgs = [convert]::ToInt32($args, 10) 
     Invoke-History $numericArgs
+    <#
+        .SYNOPSIS
+            A BASH like alias for invoking command history.
+        .DESCRIPTION
+            `! xxxx : Invoke command as specified by the ID/Line number from the command history
+            ``! xxxx : Invoke command as specified by the ID/Line number from the current command history
+        .EXAMPLE
+            `! 123
+            ``! 20
+    #>
 }
 
 # My alias's.
 Set-Alias dir msdosCMD -Scope Script -Option AllScope
 Set-Alias history getHistory -Scope Script -Option AllScope
 Set-Alias `! getHistory -Scope Script -Option AllScope
-Set-Alias ``! runFromCurrentHistory -Scope Script -Option AllScope
+Set-Alias ``! invokeCurrentHistory -Scope Script -Option AllScope
 # Set-Alias less 'C:\Program Files\Git\usr\bin\less.exe'
 
 # Setup the shell prompt
