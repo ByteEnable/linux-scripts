@@ -63,3 +63,6 @@ $ sudo dnf install -y wslu
 </fontconfig>
 
 > wsl -t $DISTRONAME
+
+# Reference - /etc/wsl.conf
+https://learn.microsoft.com/en-us/windows/wsl/wsl-config
