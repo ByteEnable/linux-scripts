@@ -13,6 +13,8 @@
 > wsl --update
 # or install https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
 
+# Set WSL to WSL2
+> wsl --set-default-version 2
 # use container image as rootfs from https://fedoraproject.org/cloud/download
 # Extract the layer.tar file and rename to fedora-$version.tar
 
