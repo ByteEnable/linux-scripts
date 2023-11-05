@@ -54,7 +54,7 @@ $ sudo dnf install -y wslu
 # Edit /etc/os-release to remove unwanted naming.
 
 # Optional - Fonts
-# Edit /etc/local.conf and add the following:
+# Edit /etc/fonts/local.conf and add the following:
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
