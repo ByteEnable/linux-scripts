@@ -1,0 +1,53 @@
+ Based on:
+ https://gist.github.com/kmatt/71603170556ef8ffd14984af77ff10c5
+ https://fedoramagazine.org/wsl-fedora-33/ 
+ 
+# prompt ">" indicates Powershell commands
+
+# https://docs.microsoft.com/en-us/windows/wsl/install-win10
+
+> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+> dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# Update WSL
+> wsl --update
+# or install https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+
+# use container image as rootfs from https://fedoraproject.org/cloud/download
+# Extract the layer.tar file and rename to fedora-$version.tar
+
+# Create directory for rootfs
+> mkdir $HOME\wsl2\Fedora-$version
+
+# Import the rootfs
+# example:  wsl.exe --import Fedora $HOMSE\wsl2\fedora-39 $HOME\Downloads\fedora-39.tar
+> wsl.exe --import $DISTRONAME $STORAGEPATH fedora-$VERSION.tar
+
+> wsl -d $DISTRONAME 
+
+# Enable man pages
+# Edit dnf.conf and remove or comment out the line "tsflags=nodocs"
+$ dnf install -y man man-pages
+$ for pkg in $(dnf repoquery --installed --qf "%{name}"); do sudo dnf reinstall -qy $pkg; done
+
+# Install some necessary utilities
+$ dnf install wget curl sudo ncurses dnf-plugins-core dnf-utils passwd findutils cracklib cracklib-dicts util-linux iproute
+$ useradd -G wheel $USER
+$ passwd $USER
+$ echo -e "[user]\ndefault=$USER" > /etc/wsl.conf
+
+# Update Fedora
+$ dnf update
+
+# Optional: Enable systemd
+# dnf install systemd
+echo -e "[boot]\nsystemd=true" >> /etc/wsl.conf
+
+# optional wslu utilities
+$ sudo dnf copr enable wslutilities/wslu
+$ sudo dnf install -y wslu
+
+# Optional
+# Edit /etc/os-release to remove unwanted naming.
+
+> wsl -t $DISTRONAME
