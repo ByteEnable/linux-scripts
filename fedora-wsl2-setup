@@ -50,7 +50,16 @@ echo -e "[boot]\nsystemd=true" >> /etc/wsl.conf
 $ sudo dnf copr enable wslutilities/wslu
 $ sudo dnf install -y wslu
 
-# Optional
+# Optional - OS name
 # Edit /etc/os-release to remove unwanted naming.
+
+# Optional - Fonts
+# Edit /etc/local.conf and add the folling:
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <dir>/mnt/c/Windows/Fonts</dir>
+    <dir>~/winhome/AppData/Local/Microsoft/Windows/Fonts</dir>
+</fontconfig>
 
 > wsl -t $DISTRONAME
