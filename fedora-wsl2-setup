@@ -43,7 +43,7 @@ $ echo -e "[user]\ndefault=$USER" > /etc/wsl.conf
 $ dnf update
 
 # Optional: Enable systemd
-# dnf install systemd
+$ dnf install systemd
 echo -e "[boot]\nsystemd=true" >> /etc/wsl.conf
 
 # optional wslu utilities
