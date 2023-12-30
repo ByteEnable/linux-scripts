@@ -44,11 +44,16 @@ $ dnf update
 
 # Optional: Enable systemd
 $ dnf install systemd
-echo -e "[boot]\nsystemd=true" >> /etc/wsl.conf
+$ echo -e "[boot]\nsystemd=true" >> /etc/wsl.conf
 
 # optional wslu utilities
-$ sudo dnf copr enable wslutilities/wslu
-$ sudo dnf install -y wslu
+$ dnf copr enable wslutilities/wslu
+$ dnf install -y wslu
+
+# Optional - Fix pam_sss.so messaging in journalctl
+#   (systemd)[210]: PAM unable to dlopen(/usr/lib64/security/pam_sss.so): /usr/lib64/security/pam_sss.so: cannot open shared object file: No such file or directory
+#   (systemd)[210]: PAM adding faulty module: /usr/lib64/security/pam_sss.so
+$ authselect select minimal
 
 # Optional - OS name
 # Edit /etc/os-release to remove unwanted naming.
